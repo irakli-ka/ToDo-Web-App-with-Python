@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    html {
+        color-scheme: dark;
+    }
+    body {
+        background-color: #343a40;
+    }
+    .col-lg-12 {
+        background-color: #989a9c;
+    }
+    h1 {
+        color: azure;
+    }
+    .table {
+        --bs-table-color: #000000;
+        --bs-table-bg: #828282;
+        --bs-table-border-color: #DEE2E6FF;
+    }
+    .status {
+        width: 100px;
+    }
+    .description {
+        word-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center">ToDos</h1>
+    <a href="/todos/add" class="btn btn-primary mb-3">Add ToDo</a>
+    <div class="row">
+      <div class="col-lg-12">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for todo in todos %}
+            <tr>
+              <td>
+                  {% if todo.status == "Done" %}
+                  <img class="status" src="https://media.discordapp.net/attachments/773834812539535360/1118625896019009596/ezgif-3-eb8814f839.png" alt="status">
+                  {% else %}
+                  <img class="status" src="https://media.discordapp.net/attachments/773834812539535360/1118626356905922620/ezgif-3-9b2b72bc65.png" alt="status">
+                  {% endif %}
+              </td>
+              <td class="description">{{ todo.description }}</td>
+              <td>
+                {% if todo.status == 'Undone' %}
+                <form action="/todos/mark-done/{{ todo.id }}" method="POST">
+                  <button class="btn btn-success" type="submit">Mark as Done</button>
+                </form>
+                {% else %}
+                <form action="/todos/mark-undone/{{ todo.id }}" method="POST">
+                  <button class="btn btn-warning" type="submit">Mark as Undone</button>
+                </form>
+                {% endif %}
+                <a href="/todos/edit/{{ todo.id }}" class="btn btn-primary">Edit</a>
+                <form action="/todos/{{ todo.id }}/delete" method="POST">
+                  <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
