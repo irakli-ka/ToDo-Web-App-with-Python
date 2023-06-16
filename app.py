@@ -63,7 +63,7 @@ def delete_todo(todo_id):
 
 @app.route('/todos/mark-done/<int:todo_id>', methods=['POST'])
 def mark_done(todo_id):
-    todo = Todo.query.get(todo_id)
+    todo = db.session.execute(db.select(Todo).where(Todo.id == todo_id)).scalars().first()
     todo.status = "Done"
     db.session.commit()
     return redirect(url_for("todo_page"))
@@ -71,7 +71,7 @@ def mark_done(todo_id):
 
 @app.route('/todos/mark-undone/<int:todo_id>', methods=['POST'])
 def mark_undone(todo_id):
-    todo = Todo.query.get(todo_id)
+    todo = db.session.execute(db.select(Todo).where(Todo.id == todo_id)).scalars().first()
     todo.status = "Undone"
     db.session.commit()
     return redirect(url_for("todo_page"))
