@@ -43,7 +43,7 @@ def add():
 def edit_todo(todo_id):
     todo_desc = db.session.execute(db.select(Todo.description).where(Todo.id == todo_id)).scalars().all()[0]
     if request.method == "POST":
-        todo = db.session.execute(db.select(Todo).where(Todo.id == todo_id)).scalars().first()
+        todo = db.get_or_404(Todo, todo_id)
         todo.description = request.form["edit"]
         db.session.commit()
         return redirect(url_for("todo_page"))
@@ -63,7 +63,7 @@ def delete_todo(todo_id):
 
 @app.route('/todos/mark-done/<int:todo_id>', methods=['POST'])
 def mark_done(todo_id):
-    todo = db.session.execute(db.select(Todo).where(Todo.id == todo_id)).scalars().first()
+    todo = db.get_or_404(Todo, todo_id)
     todo.status = "Done"
     db.session.commit()
     return redirect(url_for("todo_page"))
@@ -71,7 +71,7 @@ def mark_done(todo_id):
 
 @app.route('/todos/mark-undone/<int:todo_id>', methods=['POST'])
 def mark_undone(todo_id):
-    todo = db.session.execute(db.select(Todo).where(Todo.id == todo_id)).scalars().first()
+    todo = db.get_or_404(Todo, todo_id)
     todo.status = "Undone"
     db.session.commit()
     return redirect(url_for("todo_page"))
